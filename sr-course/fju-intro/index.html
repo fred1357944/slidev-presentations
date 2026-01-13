@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>版本選擇</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 40px 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #00d9ff; text-decoration: none; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .list { display: flex; flex-direction: column; gap: 20px; }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00d9ff;
+        }
+        .current-badge {
+            background: linear-gradient(90deg, #00d9ff, #00ff88);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 8px;
+        }
+        .status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .status-stable { color: #00ff88; background: rgba(0, 255, 136, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../" class="back-link">← 返回專案列表</a>
+            <h1 id="title">版本選擇</h1>
+        </header>
+
+        <div class="list" id="container"></div>
+    </div>
+
+    <script>
+        async function loadData() {
+            try {
+                const response = await fetch('versions.json');
+                const data = await response.json();
+
+                document.getElementById('title').textContent = data.project.name;
+
+                const container = document.getElementById('container');
+                // Sort by date desc
+                data.versions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                container.innerHTML = data.versions.map(v => `
+                    <a href="${v.folder}/" class="card">
+                        <div>
+                            <h3>${v.name} ${v.id === data.current ? '<span class="current-badge">當前版本</span>' : ''}</h3>
+                            <p style="opacity: 0.7; font-size: 0.9rem; margin-top: 5px;">${v.description}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.8rem; opacity: 0.5; margin-bottom: 5px;">${v.date}</div>
+                            <span class="status status-${v.status}">${v.status}</span>
+                        </div>
+                    </a>
+                `).join('');
+            } catch (error) {
+                console.error('載入失敗:', error);
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

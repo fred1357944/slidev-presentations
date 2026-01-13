@@ -1,0 +1,26 @@
+{
+  "course": {
+    "name": "行銷課",
+    "icon": "📊"
+  },
+  "projects": [
+    {
+      "id": "intro",
+      "name": "行銷入門",
+      "icon": "🎯",
+      "folder": "intro"
+    },
+    {
+      "id": "tech-sharing",
+      "name": "技術分享",
+      "icon": "🔬",
+      "folder": "tech-sharing"
+    },
+    {
+      "id": "product-launch",
+      "name": "產品發表",
+      "icon": "🚀",
+      "folder": "product-launch"
+    }
+  ]
+}

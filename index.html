@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-TW">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Fred's 簡報課程平台</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			body {
+				font-family:
+					-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+				background: linear-gradient(
+					135deg,
+					#1a1a2e 0%,
+					#16213e 50%,
+					#0f3460 100%
+				);
+				min-height: 100vh;
+				color: #fff;
+				padding: 40px 20px;
+			}
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+			header {
+				text-align: center;
+				margin-bottom: 60px;
+			}
+			h1 {
+				font-size: 3rem;
+				background: linear-gradient(90deg, #00d9ff, #00ff88);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				margin-bottom: 10px;
+			}
+			.subtitle {
+				font-size: 1.2rem;
+				opacity: 0.7;
+			}
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+				gap: 30px;
+			}
+			.card {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 20px;
+				padding: 30px;
+				transition: all 0.3s ease;
+				cursor: pointer;
+				text-decoration: none;
+				color: inherit;
+				display: block;
+			}
+			.card:hover {
+				transform: translateY(-5px);
+				background: rgba(255, 255, 255, 0.1);
+				border-color: #00d9ff;
+				box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2);
+			}
+			.icon {
+				font-size: 4rem;
+				margin-bottom: 20px;
+			}
+			.name {
+				font-size: 1.8rem;
+				font-weight: 600;
+				margin-bottom: 10px;
+			}
+			.desc {
+				opacity: 0.7;
+				line-height: 1.6;
+			}
+			.loading {
+				text-align: center;
+				padding: 60px;
+				opacity: 0.5;
+			}
+			footer {
+				text-align: center;
+				margin-top: 60px;
+				padding-top: 30px;
+				border-top: 1px solid rgba(255, 255, 255, 0.1);
+			}
+			footer a {
+				color: #00d9ff;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1 id="title">簡報課程平台</h1>
+				<p class="subtitle" id="subtitle">載入中...</p>
+			</header>
+
+			<div class="grid" id="container">
+				<div class="loading">載入課程中...</div>
+			</div>
+
+			<footer>
+				<p>
+					綠亦有限公司 |
+					<a href="https://andgreen.vzy.io" target="_blank">andgreen.vzy.io</a>
+				</p>
+			</footer>
+		</div>
+
+		<script>
+			async function loadData() {
+				try {
+					const response = await fetch("courses.json");
+					const data = await response.json();
+
+					document.getElementById("title").textContent =
+						data.title || "簡報課程平台";
+					document.getElementById("subtitle").textContent = "請選擇課程類別";
+
+					const container = document.getElementById("container");
+					container.innerHTML = data.courses
+						.map(
+							(course) => `
+                    <a href="${course.folder}/" class="card">
+                        <div class="icon">${course.icon}</div>
+                        <h2 class="name">${course.name}</h2>
+                        <p class="desc">${course.description}</p>
+                    </a>
+                `
+						)
+						.join("");
+
+					// Add "new course" placeholder
+					/*
+                container.innerHTML += `
+                    <div class="card" style="border-style: dashed; opacity: 0.5;" onclick="alert('請執行 scripts/new-course.sh 建立新課程')">
+                        <div class="icon">➕</div>
+                        <h2 class="name">新增課程</h2>
+                        <p class="desc">建立新的課程類別</p>
+                    </div>
+                `;
+                */
+				} catch (error) {
+					console.error("載入失敗:", error);
+					document.getElementById("container").innerHTML =
+						'<div class="loading">載入失敗 (courses.json)</div>';
+				}
+			}
+			loadData();
+		</script>
+	</body>
+</html>

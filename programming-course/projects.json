@@ -1,0 +1,15 @@
+{
+  "course": {
+    "name": "程式設計課",
+    "icon": "💻"
+  },
+  "projects": [
+    {
+      "id": "python-basics",
+      "name": "Python 基礎",
+      "icon": "🐍",
+      "description": "Python 基礎 簡報",
+      "folder": "python-basics"
+    }
+  ]
+}

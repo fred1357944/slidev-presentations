@@ -1,0 +1,26 @@
+{
+  "title": "Fred's 簡報庫",
+  "courses": [
+    {
+      "id": "marketing-course",
+      "name": "行銷課",
+      "icon": "📊",
+      "description": "行銷策略與簡報技巧",
+      "folder": "marketing-course"
+    },
+    {
+      "id": "sr-course",
+      "name": "永續報告書課程",
+      "icon": "📗",
+      "description": "永續報告書製作系統教學",
+      "folder": "sr-course"
+    },
+    {
+      "id": "programming-course",
+      "name": "程式設計課",
+      "icon": "💻",
+      "description": "程式開發教學",
+      "folder": "programming-course"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "project": {
+    "name": "輔大永續報告書系統",
+    "icon": "🎓"
+  },
+  "versions": [
+    {
+      "id": "v1",
+      "name": "第一版",
+      "description": "初始版本",
+      "date": "2026-01-13",
+      "folder": "v1",
+      "status": "draft"
+    }
+  ],
+  "current": "v1"
+}

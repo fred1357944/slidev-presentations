@@ -18,7 +18,14 @@
       "Bash(xargs:*)",
       "Bash(npx slidev build:*)",
       "Bash(curl:*)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(done)",
+      "Bash(for file in marketing-course/intro/v1/index.html marketing-course/intro/v2/index.html sr-course/fju-intro/v1/index.html)",
+      "Bash(do if [ -f \"$file\" ])",
+      "Bash(then echo \"   ✅ $file\")",
+      "Bash(else echo \"   ❌ $file\")",
+      "Bash(fi)",
+      "Bash(gh repo delete:*)"
     ]
   }
 }
