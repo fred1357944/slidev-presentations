@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(thinking-partner)",
+      "Bash(npx @slidev/cli:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx slidev slides.md --open)",
+      "Bash(cat:*)",
+      "Bash(pkill:*)",
+      "Bash(pm2 start:*)",
+      "Bash(pm2 logs:*)",
+      "Bash(pm2 save:*)",
+      "Bash(find:*)",
+      "Bash(pm2 list:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(npm run build:*)",
+      "Bash(git rm:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git push)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(open http://localhost:3031)",
+      "Bash(git fetch:*)"
+    ]
+  }
+}

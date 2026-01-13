@@ -1,0 +1,25 @@
+{
+  "name": "marketing-toolkit",
+  "version": "1.0.0",
+  "description": "行銷工具包：STP 分析、品牌故事生成、簡報大綱產出",
+  "author": "Fred Lai / 綠亦有限公司",
+  "skills": [
+    {
+      "name": "stp-analyzer",
+      "description": "分析客戶的 STP（生命階段+情境）",
+      "file": "skills/stp-analyzer.md"
+    },
+    {
+      "name": "brand-story",
+      "description": "生成品牌故事文案（三段式結構）",
+      "file": "skills/brand-story.md"
+    },
+    {
+      "name": "pitch-deck",
+      "description": "自動產出簡報大綱",
+      "file": "skills/pitch-deck.md"
+    }
+  ],
+  "keywords": ["marketing", "branding", "STP", "pitch", "startup"],
+  "repository": "https://github.com/fred1357944/marketing-toolkit"
+}

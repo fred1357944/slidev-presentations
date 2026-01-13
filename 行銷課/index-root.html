@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡報管理系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00d9ff;
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2);
+        }
+
+        .project-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .project-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .project-description {
+            opacity: 0.7;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-date {
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(0, 217, 255, 0.2);
+            color: #00d9ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .add-project {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .add-project:hover {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .add-icon {
+            font-size: 3rem;
+            opacity: 0.5;
+            margin-bottom: 15px;
+        }
+
+        .add-text {
+            opacity: 0.5;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">簡報管理系統</h1>
+            <p class="subtitle" id="subtitle">載入中...</p>
+        </header>
+
+        <div class="projects-grid" id="projects-container">
+            <div class="loading">載入專案中...</div>
+        </div>
+
+        <footer>
+            <p>綠亦有限公司 | <a href="https://andgreen.vzy.io" target="_blank">andgreen.vzy.io</a></p>
+        </footer>
+    </div>
+
+    <script>
+        async function loadProjects() {
+            try {
+                const response = await fetch('projects.json');
+                const data = await response.json();
+
+                document.getElementById('title').textContent = data.title;
+                document.getElementById('subtitle').textContent = data.subtitle;
+
+                renderProjects(data.projects);
+            } catch (error) {
+                console.error('載入專案失敗:', error);
+                document.getElementById('projects-container').innerHTML =
+                    '<div class="loading">載入失敗，請檢查 projects.json</div>';
+            }
+        }
+
+        function renderProjects(projects) {
+            const container = document.getElementById('projects-container');
+
+            // Sort by date (newest first)
+            projects.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            let html = projects.map(project => `
+                <a href="${project.folder}/" class="project-card">
+                    <div class="project-icon">${project.icon}</div>
+                    <h2 class="project-name">${project.name}</h2>
+                    <p class="project-description">${project.description}</p>
+                    <div class="project-meta">
+                        <span class="project-date">${project.date}</span>
+                        <div class="project-tags">
+                            ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+
+            // Add "new project" card
+            html += `
+                <div class="project-card add-project" onclick="alert('請參考 SLIDEV-GUIDE.md 新增專案')">
+                    <div class="add-icon">➕</div>
+                    <div class="add-text">新增專案</div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        loadProjects();
+    </script>
+</body>
+</html>

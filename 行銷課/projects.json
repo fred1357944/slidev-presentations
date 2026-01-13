@@ -1,0 +1,33 @@
+{
+  "title": "簡報管理系統",
+  "subtitle": "Fred Lai 的簡報專案庫",
+  "projects": [
+    {
+      "id": "marketing",
+      "name": "行銷課",
+      "description": "綠色科技創業的行銷實戰課",
+      "icon": "📊",
+      "folder": "marketing",
+      "date": "2025-01-06",
+      "tags": ["行銷", "創業", "B2B"]
+    },
+    {
+      "id": "tech-sharing",
+      "name": "技術分享",
+      "description": "綠藻淨氣技術原理與應用",
+      "icon": "🔬",
+      "folder": "tech-sharing",
+      "date": "2025-01-10",
+      "tags": ["技術", "綠藻", "環保"]
+    },
+    {
+      "id": "product-launch",
+      "name": "產品發表",
+      "description": "新產品發表會簡報",
+      "icon": "🚀",
+      "folder": "product-launch",
+      "date": "2025-01-15",
+      "tags": ["產品", "發表", "商業"]
+    }
+  ]
+}

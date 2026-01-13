@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slidev Editor</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .toolbar {
+      height: 40px;
+      background: #2d2d2d;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      border-bottom: 1px solid #404040;
+    }
+    .toolbar h1 {
+      font-size: 14px;
+      font-weight: 500;
+      color: #ccc;
+    }
+    .toolbar button {
+      padding: 6px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .btn-save {
+      background: #0e639c;
+      color: white;
+    }
+    .btn-save:hover { background: #1177bb; }
+    .btn-refresh {
+      background: #3c3c3c;
+      color: #ccc;
+    }
+    .btn-refresh:hover { background: #4c4c4c; }
+    .status {
+      margin-left: auto;
+      font-size: 12px;
+      color: #888;
+    }
+    .status.saved { color: #4ec9b0; }
+    .status.unsaved { color: #ce9178; }
+    .container {
+      display: flex;
+      height: calc(100vh - 40px);
+    }
+    .editor-pane {
+      width: 50%;
+      height: 100%;
+      border-right: 1px solid #404040;
+    }
+    .preview-pane {
+      width: 50%;
+      height: 100%;
+      background: #000;
+    }
+    .preview-pane iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .resizer {
+      width: 4px;
+      background: #404040;
+      cursor: col-resize;
+      transition: background 0.2s;
+    }
+    .resizer:hover { background: #0e639c; }
+    #editor { height: 100%; }
+    .slide-nav {
+      position: absolute;
+      bottom: 20px;
+      left: 25%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      background: rgba(0,0,0,0.8);
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+    .slide-nav button {
+      padding: 4px 12px;
+      background: #3c3c3c;
+      border: none;
+      color: #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .slide-nav button:hover { background: #4c4c4c; }
+    .slide-nav span { color: #888; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h1>Slidev Editor</h1>
+    <button class="btn-save" onclick="saveFile()">Save (Cmd+S)</button>
+    <button class="btn-refresh" onclick="refreshPreview()">Refresh Preview</button>
+    <span class="status" id="status">Ready</span>
+  </div>
+
+  <div class="container">
+    <div class="editor-pane">
+      <div id="editor"></div>
+    </div>
+    <div class="resizer" id="resizer"></div>
+    <div class="preview-pane">
+      <iframe id="preview" src="http://localhost:3030"></iframe>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+  <script>
+    let editor;
+    let originalContent = '';
+    let currentSlide = 1;
+
+    // Monaco Editor setup
+    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+      // Register Slidev/Markdown language
+      monaco.languages.register({ id: 'slidev' });
+      monaco.languages.setMonarchTokensProvider('slidev', {
+        tokenizer: {
+          root: [
+            [/^---$/, 'keyword'],
+            [/^#{1,6}\s.*$/, 'type'],
+            [/\*\*[^*]+\*\*/, 'strong'],
+            [/\*[^*]+\*/, 'emphasis'],
+            [/`[^`]+`/, 'string'],
+            [/```[\s\S]*?```/, 'string'],
+            [/<v-click[^>]*>/, 'tag'],
+            [/<\/v-click>/, 'tag'],
+            [/<v-clicks[^>]*>/, 'tag'],
+            [/<\/v-clicks>/, 'tag'],
+            [/\[([^\]]+)\]\(([^)]+)\)/, 'string.link'],
+          ]
+        }
+      });
+
+      editor = monaco.editor.create(document.getElementById('editor'), {
+        value: '// Loading...',
+        language: 'markdown',
+        theme: 'vs-dark',
+        fontSize: 14,
+        lineNumbers: 'on',
+        minimap: { enabled: false },
+        wordWrap: 'on',
+        automaticLayout: true,
+        scrollBeyondLastLine: false,
+        padding: { top: 16 }
+      });
+
+      // Load file content
+      loadFile();
+
+      // Auto-save indicator
+      editor.onDidChangeModelContent(() => {
+        const currentContent = editor.getValue();
+        if (currentContent !== originalContent) {
+          updateStatus('Unsaved changes', 'unsaved');
+        } else {
+          updateStatus('Saved', 'saved');
+        }
+      });
+
+      // Keyboard shortcuts
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+        saveFile();
+      });
+    });
+
+    async function loadFile() {
+      try {
+        const response = await fetch('/api/load');
+        const content = await response.text();
+        originalContent = content;
+        editor.setValue(content);
+        updateStatus('Loaded', 'saved');
+      } catch (err) {
+        // Fallback: show demo content
+        const demoContent = `---
+theme: default
+editor: true
+---
+
+# Welcome to Slidev Editor
+
+Edit your slides here!
+
+---
+
+## Slide 2
+
+- Point 1
+- Point 2
+- Point 3
+
+---
+
+## Slide 3
+
+\`\`\`js
+console.log('Hello Slidev!')
+\`\`\`
+`;
+        editor.setValue(demoContent);
+        originalContent = demoContent;
+        updateStatus('Demo mode (no server)', 'unsaved');
+      }
+    }
+
+    async function saveFile() {
+      const content = editor.getValue();
+      try {
+        const response = await fetch('/api/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: content
+        });
+        if (response.ok) {
+          originalContent = content;
+          updateStatus('Saved!', 'saved');
+          setTimeout(() => refreshPreview(), 500);
+        }
+      } catch (err) {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(content);
+        updateStatus('Copied to clipboard (no server)', 'saved');
+      }
+    }
+
+    function refreshPreview() {
+      const iframe = document.getElementById('preview');
+      iframe.src = iframe.src;
+    }
+
+    function updateStatus(text, className) {
+      const status = document.getElementById('status');
+      status.textContent = text;
+      status.className = 'status ' + className;
+    }
+
+    // Resizer functionality
+    const resizer = document.getElementById('resizer');
+    const editorPane = document.querySelector('.editor-pane');
+    const previewPane = document.querySelector('.preview-pane');
+
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const containerWidth = document.querySelector('.container').offsetWidth;
+      const newEditorWidth = (e.clientX / containerWidth) * 100;
+      if (newEditorWidth > 20 && newEditorWidth < 80) {
+        editorPane.style.width = newEditorWidth + '%';
+        previewPane.style.width = (100 - newEditorWidth) + '%';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isResizing = false;
+      document.body.style.cursor = 'default';
+    });
+  </script>
+</body>
+</html>
