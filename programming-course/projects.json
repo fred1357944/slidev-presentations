@@ -10,6 +10,13 @@
       "icon": "🐍",
       "description": "Python 基礎 簡報",
       "folder": "python-basics"
+    },
+    {
+      "id": "playwright-mcp",
+      "name": "Playwright MCP 自動化測試",
+      "icon": "🎭",
+      "description": "使用 AI 驅動的瀏覽器自動化測試",
+      "folder": "playwright-mcp"
     }
   ]
 }

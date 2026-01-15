@@ -25,7 +25,13 @@
       "Bash(then echo \"   ✅ $file\")",
       "Bash(else echo \"   ❌ $file\")",
       "Bash(fi)",
-      "Bash(gh repo delete:*)"
+      "Bash(gh repo delete:*)",
+      "Bash(git remote remove:*)",
+      "Bash(gh repo create:*)",
+      "Bash(gh repo view:*)",
+      "Bash(pkill -f \"git push\")",
+      "Bash(GIT_TERMINAL_PROMPT=0 git push:*)",
+      "Bash(gh repo sync:*)"
     ]
   }
 }

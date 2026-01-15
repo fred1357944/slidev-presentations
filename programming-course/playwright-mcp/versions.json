@@ -1,0 +1,17 @@
+{
+  "project": {
+    "name": "Playwright MCP 自動化測試",
+    "icon": "🎭"
+  },
+  "versions": [
+    {
+      "id": "v1",
+      "name": "第一版",
+      "description": "Playwright MCP 基礎教學與實戰演示",
+      "date": "2026-01-15",
+      "folder": "v1",
+      "status": "stable"
+    }
+  ],
+  "current": "v1"
+}

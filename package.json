@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "slidev slides.md --port 3030",
+    "serve": "npx serve . -l 3030",
     "build": "slidev build",
     "export": "slidev export",
+    "setup": "npm install && chmod +x scripts/*.sh && bash scripts/install-hooks.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
