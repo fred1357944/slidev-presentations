@@ -321,9 +321,12 @@ layout: two-cols
 
 ::right::
 
-<div class="p-4">
-  <img src="./assets/test-01-homepage-project-list.png" class="rounded-lg shadow-2xl border border-gray-700" />
-  <div class="text-center text-xs mt-2 opacity-60">目標應用程式介面</div>
+<div class="p-4 bg-gray-800/50 rounded-lg border border-gray-700 h-64 flex items-center justify-center">
+  <div class="text-center">
+    <div class="text-4xl mb-2">🖥️</div>
+    <div class="text-sm opacity-80">目標應用程式介面</div>
+    <div class="text-xs opacity-50 mt-1">Dashboard 專案列表畫面</div>
+  </div>
 </div>
 
 ---
@@ -410,8 +413,11 @@ layout: two-cols
   </table>
 </div>
 
-<div class="relative">
-  <img src="./assets/test-05-docker-management.png" class="rounded shadow-lg border border-gray-600" />
+<div class="relative bg-gray-800/50 rounded-lg border border-gray-600 h-40 flex items-center justify-center">
+  <div class="text-center">
+    <div class="text-3xl mb-1">🐳</div>
+    <div class="text-sm opacity-80">Docker 管理介面</div>
+  </div>
   <div class="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs">browser_take_screenshot</div>
 </div>
 
