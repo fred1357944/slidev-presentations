@@ -11,7 +11,23 @@
       "date": "2026-01-13",
       "folder": "v1",
       "status": "draft"
+    },
+    {
+      "id": "v2",
+      "name": "第二版",
+      "description": "優化版：增加故事性開場、v-click 動畫、互動練習環節",
+      "date": "2026-01-16",
+      "folder": "v2",
+      "status": "draft"
+    },
+    {
+      "id": "v3",
+      "name": "第三版",
+      "description": "進階版：Unsplash 封面、Carbon Icons、課程導航、對比式設計、統計卡片",
+      "date": "2026-01-16",
+      "folder": "v3",
+      "status": "stable"
     }
   ],
-  "current": "v1"
+  "current": "v3"
 }

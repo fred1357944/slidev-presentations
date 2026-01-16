@@ -1,0 +1,18 @@
+# 無效的 Carbon Icons 清單
+# 這些 icons 會導致 Slidev build 失敗
+carbon:target
+carbon:bullseye
+carbon:calendar
+carbon:email
+carbon:quotes
+carbon:diagram
+carbon:edit
+carbon:chart-line
+carbon:chart-bar
+carbon:chart-area
+carbon:chart-pie
+carbon:user
+carbon:user-avatar
+carbon:settings
+carbon:time
+carbon:link
